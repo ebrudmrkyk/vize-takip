@@ -7,18 +7,20 @@ def check_appointments():
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     }
 
+    # GENİŞLETİLMİŞ SORGULANACAK LİSTE
     sorgu_listesi = [
-        # --- ANKARA ÖNCELİKLİ LİSTE ---
+        # --- ANKARA ÖNCELİKLİ (YENİ ÜLKELER DAHİL) ---
+        {"ulke": "Macaristan", "ad": "Ankara", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/hun/interim"},
+        {"ulke": "Danimarka", "ad": "Ankara", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/dnk/interim"},
+        {"ulke": "Romanya", "ad": "Ankara", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/rou/interim"},
         {"ulke": "Almanya", "ad": "Ankara", "type": "idata", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "1"}},
         {"ulke": "İtalya", "ad": "Ankara", "type": "idata", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "2"}},
         {"ulke": "İspanya", "ad": "Ankara", "type": "bls", "url": "https://turkey.blsspainvisa.com/ankara/index.php"},
-        {"ulke": "Yunanistan", "ad": "Ankara (VFS)", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/grc/interim"},
-        {"ulke": "Fransa", "ad": "Ankara (VFS)", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/fra/interim"},
         
-        # --- İSTANBUL VE DİĞERLERİ ---
-        {"ulke": "Almanya", "ad": "İstanbul", "type": "idata", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "1"}},
-        {"ulke": "Yunanistan", "ad": "İstanbul (VFS)", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/grc/interim"},
-        {"ulke": "Hollanda", "ad": "İstanbul (VFS)", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/nld/interim"}
+        # --- İSTANBUL ---
+        {"ulke": "Macaristan", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/hun/interim"},
+        {"ulke": "Yunanistan", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/grc/interim"},
+        {"ulke": "Fransa", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/fra/interim"}
     ]
     
     sonuclar = []
@@ -27,11 +29,9 @@ def check_appointments():
     for madde in sorgu_listesi:
         try:
             if madde["type"] == "vfs":
-                # VFS Global için "Interim" (geçiş) sayfalarını kontrol ediyoruz
-                response = requests.get(madde["url"], headers=headers, timeout=20)
+                response = requests.get(madde["url"], headers=headers, timeout=25)
                 res_text = response.text.lower()
-                # VFS'de randevu sistemi kapalıysa genellikle "no slots" veya "high demand" yazar
-                # Ters mantıkla: Eğer bu uyarılar yoksa randevu ihtimali vardır
+                # VFS'de olumlu ibareleri arıyoruz
                 bulundu_mu = any(x in res_text for x in ["available", "tarih seç", "randevu al"]) and "no slots" not in res_text
             
             elif madde["type"] == "bls":
