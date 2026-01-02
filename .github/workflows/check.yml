@@ -1,26 +1,30 @@
 name: Vize Kontrol Botu
 on:
   schedule:
-    - cron: '*/15 * * * *' # Her 15 dakikada bir çalıştır
-  workflow_dispatch: # İstediğimizde elimizle çalıştırmak için
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Python Kur
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-      - name: Gerekli Paketleri Yükle
+
+      - name: Gerekli Paketleri Yukle
         run: pip install requests
-      - name: Botu Çalıştır
+
+      - name: Botu Calistir
         run: python bot.py
-- name: Sonucu Kaydet ve Yükle
+
+      - name: Sonucu Kaydet ve Yukle
         run: |
-          git config --global user.name 'Vize Botu'
-          git config --global user.email 'bot@vize.com'
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add sonuc.json
-          git commit -m "Güncel randevu durumu" || echo "Değişiklik yok"
+          git commit -m "Güncel randevu durumu" || echo "Degisiklik yok"
           git push
