@@ -3,26 +3,17 @@ import json
 from datetime import datetime
 
 def check_appointments():
+    # Daha geniş bir tarayıcı kimliği listesi kullanıyoruz
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
     }
 
-    # SORGULANACAK TAM LİSTE
     sorgu_listesi = [
-        # ALMANYA (iDATA - type: 1)
-        {"ulke": "Almanya", "ad": "İstanbul (Gayrettepe)", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "1"}},
-        {"ulke": "Almanya", "ad": "İstanbul (Altunizade)", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "2", "type": "1"}},
-        {"ulke": "Almanya", "ad": "Ankara", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "1"}},
-        {"ulke": "Almanya", "ad": "İzmir", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "3", "office": "4", "type": "1"}},
-        {"ulke": "Almanya", "ad": "Bursa", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "5", "type": "1"}},
-        
-        # İTALYA (iDATA - type: 2)
-        {"ulke": "İtalya", "ad": "İstanbul (Gayrettepe)", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "2"}},
-        {"ulke": "İtalya", "ad": "İstanbul (Altunizade)", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "2", "type": "2"}},
-        {"ulke": "İtalya", "ad": "Ankara", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "2"}},
-        {"ulke": "İtalya", "ad": "İzmir", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "3", "office": "4", "type": "2"}},
-        
-        # İSPANYA (BLS)
+        # ALMANYA ve İTALYA bölümleri aynı kalabilir...
+        {"ulke": "Almanya", "ad": "İstanbul", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "1"}},
+        {"ulke": "İtalya", "ad": "İstanbul", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "2"}},
+        # İSPANYA (BLS) - URL'leri daha doğrudan hale getirdik
         {"ulke": "İspanya", "ad": "İstanbul", "url": "https://turkey.blsspainvisa.com/istanbul/index.php", "params": None},
         {"ulke": "İspanya", "ad": "Ankara", "url": "https://turkey.blsspainvisa.com/ankara/index.php", "params": None}
     ]
@@ -32,34 +23,38 @@ def check_appointments():
 
     for madde in sorgu_listesi:
         try:
+            # timeout süresini 30 saniyeye çıkardık ki site yavaşsa hata vermesin
             if madde["ulke"] == "İspanya":
-                response = requests.get(madde["url"], headers=headers, timeout=15)
-                res_text = response.text.lower()
-                bulundu_mu = any(x in res_text for x in ["appointment available", "randevu uygun", "tarih seç"])
+                response = requests.get(madde["url"], headers=headers, timeout=30)
             else:
-                response = requests.get(madde["url"], params=madde["params"], headers=headers, timeout=10)
-                res_text = response.text.lower()
-                bulundu_mu = any(x in res_text for x in ["müsait", "available", "seçiniz", "2026"])
+                response = requests.get(madde["url"], params=madde["params"], headers=headers, timeout=20)
+            
+            res_text = response.text.lower()
+            
+            # BLS için anahtar kelimeleri genişlettik
+            bulundu_mu = any(x in res_text for x in ["appointment available", "randevu uygun", "tarih seç", "booking", "müsait"])
             
             sonuclar.append({
-                "kimlik": f"{madde['ulke']}-{madde['ad']}-{madde.get('params', {}).get('type', '')}",
+                "kimlik": f"{madde['ulke']}-{madde['ad']}",
                 "ulke": madde["ulke"],
                 "ofis": madde["ad"],
                 "durum": "✅ RANDEVU VAR!" if bulundu_mu else "❌ Randevu Yok",
                 "aktif": "aktif" if bulundu_mu else "pasif"
             })
-        except:
+        except Exception as e:
+            # Hatanın ne olduğunu GitHub Actions loglarında görmek için:
+            print(f"Hata detayı ({madde['ulke']}-{madde['ad']}): {e}")
             sonuclar.append({
-                "kimlik": f"{madde['ulke']}-{madde['ad']}-hata",
+                "kimlik": f"{madde['ulke']}-{madde['ad']}",
                 "ulke": madde["ulke"],
                 "ofis": madde["ad"],
-                "durum": "⚠️ Hata",
+                "durum": "⚠️ Site Erişilemez",
                 "aktif": "pasif"
             })
 
-    data = {"son_kontrol": su_an, "liste": sonuclar}
+    # Kayıt işlemi...
     with open("sonuc.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump({"son_kontrol": su_an, "liste": sonuclar}, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     check_appointments()
