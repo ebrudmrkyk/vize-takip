@@ -2,23 +2,21 @@ import requests
 import json
 from datetime import datetime
 
-def check_idata():
-    url = "https://idata.com.tr/vi/control/check-appointment-status"
+def check_appointments():
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "X-Requested-With": "XMLHttpRequest"
     }
 
-    # iDATA üzerindeki tüm ülkeler ve ofisleri
+    # SORGULANACAK LİSTE (Almanya, İtalya, İspanya)
     sorgu_listesi = [
-        # ALMANYA OFİSLERİ
-        {"ulke": "Almanya", "ad": "İstanbul (Gayrettepe)", "city": "1", "office": "1", "type": "1"},
-        {"ulke": "Almanya", "ad": "Ankara", "city": "2", "office": "3", "type": "1"},
-        {"ulke": "Almanya", "ad": "İzmir", "city": "3", "office": "4", "type": "1"},
-        # İTALYA OFİSLERİ
-        {"ulke": "İtalya", "ad": "İstanbul (Gayrettepe)", "city": "1", "office": "1", "type": "2"},
-        {"ulke": "İtalya", "ad": "Ankara", "city": "2", "office": "3", "type": "2"},
-        {"ulke": "İtalya", "ad": "İzmir", "city": "3", "office": "4", "type": "2"}
+        # ALMANYA (iDATA)
+        {"ulke": "Almanya", "ad": "İstanbul (Gayrettepe)", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "1"}},
+        {"ulke": "Almanya", "ad": "Ankara", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "1"}},
+        # İTALYA (iDATA)
+        {"ulke": "İtalya", "ad": "İstanbul", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "1", "office": "1", "type": "2"}},
+        # İSPANYA (BLS)
+        {"ulke": "İspanya", "ad": "İstanbul", "url": "https://turkey.blsspainvisa.com/istanbul/index.php", "params": None},
+        {"ulke": "İspanya", "ad": "Ankara", "url": "https://turkey.blsspainvisa.com/ankara/index.php", "params": None}
     ]
     
     sonuclar = []
@@ -26,12 +24,17 @@ def check_idata():
 
     for madde in sorgu_listesi:
         try:
-            # type=1 Almanya, type=2 İtalya (Genel temsil)
-            params = {"city": madde["city"], "office": madde["office"], "type": madde["type"]}
-            response = requests.get(url, params=params, headers=headers, timeout=10)
-            res_text = response.text.lower()
-            
-            bulundu_mu = any(x in res_text for x in ["müsait", "available", "seçiniz", "2026"])
+            if madde["ulke"] == "İspanya":
+                # BLS için basit bir sayfa kontrolü (Randevu kelimesini arar)
+                response = requests.get(madde["url"], headers=headers, timeout=15)
+                res_text = response.text.lower()
+                # BLS sayfasında "müsaitlik" belirten anahtar kelimeler
+                bulundu_mu = any(x in res_text for x in ["appointment available", "randevu uygun", "tarih seç"])
+            else:
+                # iDATA kontrolü (Almanya & İtalya)
+                response = requests.get(madde["url"], params=madde["params"], headers=headers, timeout=10)
+                res_text = response.text.lower()
+                bulundu_mu = any(x in res_text for x in ["müsait", "available", "seçiniz", "2026"])
             
             sonuclar.append({
                 "kimlik": f"{madde['ulke']}-{madde['ad']}",
@@ -45,7 +48,7 @@ def check_idata():
                 "kimlik": f"{madde['ulke']}-{madde['ad']}",
                 "ulke": madde["ulke"],
                 "ofis": madde["ad"],
-                "durum": "⚠️ Bağlantı Hatası",
+                "durum": "⚠️ Hata",
                 "aktif": "pasif"
             })
 
@@ -54,4 +57,4 @@ def check_idata():
         json.dump(data, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
-    check_idata()
+    check_appointments()
