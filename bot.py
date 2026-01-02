@@ -3,13 +3,13 @@ import json
 from datetime import datetime, timedelta
 
 # --- AYARLAR ---
-# Uygulamayı açtığında ekranda görünen veya console'da yazan tokenı buraya yapıştır
-EXPO_PUSH_TOKEN = "BeKUMCJEQBR7tm0J_v2JvE"
+# Buraya uygulamadan aldığın ExponentPushToken[...] kodunu yapıştır!
+EXPO_PUSH_TOKEN = "BURAYA_KOPYALADIGIN_TOKENI_YAPISTIR"
 
 def send_push_notification(title, body):
-    """Expo sunucuları üzerinden telefona bildirim gönderir."""
+    """Expo üzerinden telefona anlık bildirim gönderir."""
     if "ExponentPushToken" not in EXPO_PUSH_TOKEN:
-        print("HATA: Geçerli bir Expo Push Token ayarlanmamış!")
+        print("HATA: Geçerli bir Expo Push Token girilmemiş!")
         return
 
     url = "https://exp.host/--/api/v2/push/send"
@@ -22,9 +22,9 @@ def send_push_notification(title, body):
     }
     try:
         response = requests.post(url, json=payload, timeout=10)
-        print(f"Bildirim Gönderim Durumu: {response.status_code}")
+        print(f"Bildirim durumu: {response.status_code}")
     except Exception as e:
-        print(f"Bildirim gönderilirken hata oluştu: {e}")
+        print(f"Bildirim hatası: {e}")
 
 def check_appointments():
     headers = {
@@ -35,17 +35,15 @@ def check_appointments():
     tr_saati = datetime.utcnow() + timedelta(hours=3)
     su_an = tr_saati.strftime("%d/%m/%Y %H:%M")
 
-    # SORGULANACAK LİSTE (ANKARA ÖNCELİKLİ)
+    # SORGULANACAK LİSTE (ANKARA EN ÜSTTE)
     sorgu_listesi = [
         {"ulke": "Macaristan", "ad": "Ankara", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/hun/interim"},
         {"ulke": "Danimarka", "ad": "Ankara", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/dnk/interim"},
-        {"ulke": "Romanya", "ad": "Ankara", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/rou/interim"},
         {"ulke": "Almanya", "ad": "Ankara", "type": "idata", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "1"}},
         {"ulke": "İtalya", "ad": "Ankara", "type": "idata", "url": "https://idata.com.tr/vi/control/check-appointment-status", "params": {"city": "2", "office": "3", "type": "2"}},
         {"ulke": "İspanya", "ad": "Ankara", "type": "bls", "url": "https://turkey.blsspainvisa.com/ankara/index.php"},
-        {"ulke": "Yunanistan", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/grc/interim"},
         {"ulke": "Fransa", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/fra/interim"},
-        {"ulke": "Hollanda", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/nld/interim"}
+        {"ulke": "Yunanistan", "ad": "İstanbul", "type": "vfs", "url": "https://visa.vfsglobal.com/tur/tr/grc/interim"}
     ]
     
     sonuclar = []
@@ -54,27 +52,31 @@ def check_appointments():
         try:
             bulundu_mu = False
             
-            # VFS Global Kontrolü
+            # 1. VFS Kontrolü
             if madde["type"] == "vfs":
                 response = requests.get(madde["url"], headers=headers, timeout=25)
-                res_text = response.text.lower()
-                bulundu_mu = any(x in res_text for x in ["available", "tarih seç", "randevu al"]) and "no slots" not in res_text
+                bulundu_mu = any(x in response.text.lower() for x in ["available", "tarih seç", "randevu al"]) and "no slots" not in response.text.lower()
             
-            # BLS İspanya Kontrolü
+            # 2. BLS Kontrolü
             elif madde["type"] == "bls":
                 response = requests.get(madde["url"], headers=headers, timeout=20)
-                bulundu_mu = any(x in response.text.lower() for x in ["available", "randevu uygun", "booking"])
+                bulundu_mu = "available" in response.text.lower()
             
-            # iDATA (Almanya/İtalya) Kontrolü
-            else: 
+            # 3. iDATA Kontrolü
+            else:
                 response = requests.get(madde["url"], params=madde["params"], headers=headers, timeout=15)
                 bulundu_mu = any(x in response.text.lower() for x in ["müsait", "available", "2026"])
-            
-            # --- BİLDİRİM TETİKLEME ---
+
+            # --- TEST MODU (BURASI TEST İÇİNDİR) ---
+            # Macaristan için her zaman bildirim tetikler. Test başarılıysa bu 2 satırı silebilirsin.
+            if madde["ulke"] == "Macaristan":
+                bulundu_mu = True 
+
+            # --- BİLDİRİM GÖNDER ---
             if bulundu_mu:
                 send_push_notification(
                     f"🚨 RANDEVU BULDUM: {madde['ulke']}",
-                    f"{madde['ad']} ofisinde randevu uygun görünüyor! Saat: {su_an}"
+                    f"{madde['ad']} ofisinde randevu uygun! Hemen kontrol et. Saat: {su_an}"
                 )
             
             sonuclar.append({
@@ -86,7 +88,7 @@ def check_appointments():
             })
             
         except Exception as e:
-            print(f"Hata oluştu ({madde['ulke']}-{madde['ad']}): {e}")
+            print(f"Hata: {madde['ulke']} - {e}")
             sonuclar.append({
                 "kimlik": f"{madde['ulke']}-{madde['ad']}",
                 "ulke": madde["ulke"],
@@ -95,10 +97,9 @@ def check_appointments():
                 "aktif": "pasif"
             })
 
-    # Veriyi JSON olarak kaydet
-    data = {"son_kontrol": su_an, "liste": sonuclar}
+    # Kayıt
     with open("sonuc.json", "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        json.dump({"son_kontrol": su_an, "liste": sonuclar}, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     check_appointments()
