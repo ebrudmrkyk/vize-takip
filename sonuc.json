@@ -1,29 +1,46 @@
 {
-    "son_kontrol": "02/01/2026 14:10",
+    "son_kontrol": "02/01/2026 14:15",
     "liste": [
         {
+            "kimlik": "Almanya-İstanbul (Gayrettepe)",
+            "ulke": "Almanya",
             "ofis": "İstanbul (Gayrettepe)",
-            "durum": "Randevu Yok",
+            "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "ofis": "İstanbul (Altunizade)",
-            "durum": "Randevu Yok",
-            "aktif": "pasif"
-        },
-        {
+            "kimlik": "Almanya-Ankara",
+            "ulke": "Almanya",
             "ofis": "Ankara",
-            "durum": "Randevu Yok",
+            "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
+            "kimlik": "Almanya-İzmir",
+            "ulke": "Almanya",
             "ofis": "İzmir",
-            "durum": "Randevu Yok",
+            "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "ofis": "Antalya",
-            "durum": "Randevu Yok",
+            "kimlik": "İtalya-İstanbul (Gayrettepe)",
+            "ulke": "İtalya",
+            "ofis": "İstanbul (Gayrettepe)",
+            "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "İtalya-Ankara",
+            "ulke": "İtalya",
+            "ofis": "Ankara",
+            "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "İtalya-İzmir",
+            "ulke": "İtalya",
+            "ofis": "İzmir",
+            "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         }
     ]
