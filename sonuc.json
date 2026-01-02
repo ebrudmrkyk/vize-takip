@@ -1,23 +1,16 @@
 {
-    "son_kontrol": "02/01/2026 21:37",
+    "son_kontrol": "02/01/2026 21:42",
     "liste": [
         {
             "kimlik": "Macaristan-Ankara",
             "ulke": "Macaristan",
             "ofis": "Ankara",
-            "durum": "❌ Randevu Yok",
-            "aktif": "pasif"
+            "durum": "✅ RANDEVU VAR!",
+            "aktif": "aktif"
         },
         {
             "kimlik": "Danimarka-Ankara",
             "ulke": "Danimarka",
-            "ofis": "Ankara",
-            "durum": "❌ Randevu Yok",
-            "aktif": "pasif"
-        },
-        {
-            "kimlik": "Romanya-Ankara",
-            "ulke": "Romanya",
             "ofis": "Ankara",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
@@ -44,13 +37,6 @@
             "aktif": "pasif"
         },
         {
-            "kimlik": "Yunanistan-İstanbul",
-            "ulke": "Yunanistan",
-            "ofis": "İstanbul",
-            "durum": "❌ Randevu Yok",
-            "aktif": "pasif"
-        },
-        {
             "kimlik": "Fransa-İstanbul",
             "ulke": "Fransa",
             "ofis": "İstanbul",
@@ -58,8 +44,8 @@
             "aktif": "pasif"
         },
         {
-            "kimlik": "Hollanda-İstanbul",
-            "ulke": "Hollanda",
+            "kimlik": "Yunanistan-İstanbul",
+            "ulke": "Yunanistan",
             "ofis": "İstanbul",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
