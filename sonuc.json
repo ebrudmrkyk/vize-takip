@@ -1,5 +1,5 @@
 {
-    "son_kontrol": "02/01/2026 14:15",
+    "son_kontrol": "02/01/2026 14:20",
     "liste": [
         {
             "kimlik": "Almanya-İstanbul (Gayrettepe)",
@@ -16,30 +16,23 @@
             "aktif": "pasif"
         },
         {
-            "kimlik": "Almanya-İzmir",
-            "ulke": "Almanya",
-            "ofis": "İzmir",
+            "kimlik": "İtalya-İstanbul",
+            "ulke": "İtalya",
+            "ofis": "İstanbul",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "kimlik": "İtalya-İstanbul (Gayrettepe)",
-            "ulke": "İtalya",
-            "ofis": "İstanbul (Gayrettepe)",
+            "kimlik": "İspanya-İstanbul",
+            "ulke": "İspanya",
+            "ofis": "İstanbul",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "kimlik": "İtalya-Ankara",
-            "ulke": "İtalya",
+            "kimlik": "İspanya-Ankara",
+            "ulke": "İspanya",
             "ofis": "Ankara",
-            "durum": "❌ Randevu Yok",
-            "aktif": "pasif"
-        },
-        {
-            "kimlik": "İtalya-İzmir",
-            "ulke": "İtalya",
-            "ofis": "İzmir",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         }
