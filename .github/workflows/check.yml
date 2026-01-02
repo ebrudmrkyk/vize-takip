@@ -1,0 +1,19 @@
+name: Vize Kontrol Botu
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Her 15 dakikada bir çalıştır
+  workflow_dispatch: # İstediğimizde elimizle çalıştırmak için
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Python Kur
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Gerekli Paketleri Yükle
+        run: pip install requests
+      - name: Botu Çalıştır
+        run: python bot.py
