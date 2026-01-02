@@ -1,5 +1,5 @@
 {
-    "son_kontrol": "02/01/2026 14:04",
+    "son_kontrol": "02/01/2026 14:10",
     "liste": [
         {
             "ofis": "İstanbul (Gayrettepe)",
@@ -22,7 +22,7 @@
             "aktif": "pasif"
         },
         {
-            "ofis": "Bursa",
+            "ofis": "Antalya",
             "durum": "Randevu Yok",
             "aktif": "pasif"
         }
