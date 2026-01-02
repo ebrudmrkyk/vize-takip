@@ -1,6 +1,30 @@
 {
-    "ulke": "Almanya",
-    "tarih": "Şu an randevu yok",
-    "son_kontrol": "02/01/2026 13:58",
-    "durum": "pasif"
+    "son_kontrol": "02/01/2026 14:04",
+    "liste": [
+        {
+            "ofis": "İstanbul (Gayrettepe)",
+            "durum": "Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "ofis": "İstanbul (Altunizade)",
+            "durum": "Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "ofis": "Ankara",
+            "durum": "Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "ofis": "İzmir",
+            "durum": "Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "ofis": "Bursa",
+            "durum": "Randevu Yok",
+            "aktif": "pasif"
+        }
+    ]
 }
