@@ -1,39 +1,81 @@
 {
-    "son_kontrol": "02/01/2026 14:20",
+    "son_kontrol": "02/01/2026 14:25",
     "liste": [
         {
-            "kimlik": "Almanya-İstanbul (Gayrettepe)",
+            "kimlik": "Almanya-İstanbul (Gayrettepe)-1",
             "ulke": "Almanya",
             "ofis": "İstanbul (Gayrettepe)",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "kimlik": "Almanya-Ankara",
+            "kimlik": "Almanya-İstanbul (Altunizade)-1",
+            "ulke": "Almanya",
+            "ofis": "İstanbul (Altunizade)",
+            "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "Almanya-Ankara-1",
             "ulke": "Almanya",
             "ofis": "Ankara",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "kimlik": "İtalya-İstanbul",
+            "kimlik": "Almanya-İzmir-1",
+            "ulke": "Almanya",
+            "ofis": "İzmir",
+            "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "Almanya-Bursa-1",
+            "ulke": "Almanya",
+            "ofis": "Bursa",
+            "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "İtalya-İstanbul (Gayrettepe)-2",
             "ulke": "İtalya",
-            "ofis": "İstanbul",
+            "ofis": "İstanbul (Gayrettepe)",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "kimlik": "İspanya-İstanbul",
-            "ulke": "İspanya",
-            "ofis": "İstanbul",
+            "kimlik": "İtalya-İstanbul (Altunizade)-2",
+            "ulke": "İtalya",
+            "ofis": "İstanbul (Altunizade)",
             "durum": "❌ Randevu Yok",
             "aktif": "pasif"
         },
         {
-            "kimlik": "İspanya-Ankara",
-            "ulke": "İspanya",
+            "kimlik": "İtalya-Ankara-2",
+            "ulke": "İtalya",
             "ofis": "Ankara",
             "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "İtalya-İzmir-2",
+            "ulke": "İtalya",
+            "ofis": "İzmir",
+            "durum": "❌ Randevu Yok",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "İspanya-İstanbul-hata",
+            "ulke": "İspanya",
+            "ofis": "İstanbul",
+            "durum": "⚠️ Hata",
+            "aktif": "pasif"
+        },
+        {
+            "kimlik": "İspanya-Ankara-hata",
+            "ulke": "İspanya",
+            "ofis": "Ankara",
+            "durum": "⚠️ Hata",
             "aktif": "pasif"
         }
     ]
