@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 # --- AYARLAR ---
 # Buraya uygulamadan aldığın ExponentPushToken[...] kodunu yapıştır!
-EXPO_PUSH_TOKEN = "BURAYA_KOPYALADIGIN_TOKENI_YAPISTIR"
+EXPO_PUSH_TOKEN = "BeKUMCJEQBR7tm0J_v2JvE"
 
 def send_push_notification(title, body):
     """Expo üzerinden telefona anlık bildirim gönderir."""
