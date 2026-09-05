@@ -1,5 +1,5 @@
 {
-    "son_kontrol": "05/09/2026 08:45",
+    "son_kontrol": "05/09/2026 12:27",
     "liste": [
         {
             "kimlik": "Macaristan-Ankara",
@@ -54,7 +54,7 @@
             "kimlik": "Fransa-İstanbul",
             "ulke": "Fransa",
             "ofis": "İstanbul",
-            "durum": "❌ Randevu Yok",
+            "durum": "⚠️ Hata",
             "aktif": "pasif"
         },
         {
